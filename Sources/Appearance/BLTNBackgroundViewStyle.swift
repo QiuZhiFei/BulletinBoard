@@ -11,10 +11,10 @@ import UIKit
 
 @objc public class BLTNBackgroundViewStyle: NSObject {
 
-    enum Style {
+    public enum Style {
 
         case none
-        case dimmed
+        case dimmed(color: UIColor = UIColor(white: 0.0, alpha: 0.5))
         case blurred(style: UIBlurEffect.Style, isDark: Bool)
 
         var isDark: Bool {
@@ -30,7 +30,7 @@ import UIKit
 
     let rawValue: Style
 
-    init(rawValue: Style) {
+    public init(rawValue: Style) {
         self.rawValue = rawValue
     }
 
@@ -56,7 +56,7 @@ extension BLTNBackgroundViewStyle {
      * UIKit alerts and action sheets.
      */
 
-    @objc public static let dimmed = BLTNBackgroundViewStyle(rawValue: .dimmed)
+    @objc public static let dimmed = BLTNBackgroundViewStyle(rawValue: .dimmed())
 
     /**
      * The background is blurred with the specified effect.

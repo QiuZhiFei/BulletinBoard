@@ -76,9 +76,10 @@ class BulletinBackgroundView: UIView {
             addSubview(dimmingView)
             contentView = .dim(dimmingView, 0.0)
 
-        case .dimmed:
+        case .dimmed(let color):
 
             let dimmingView = makeDimmingView()
+            dimmingView.backgroundColor = color
 
             addSubview(dimmingView)
             contentView = .dim(dimmingView, 1.0)
