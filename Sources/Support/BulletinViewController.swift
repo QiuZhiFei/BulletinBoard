@@ -295,13 +295,24 @@ extension BulletinViewController {
             contentStackView.spacing = 32
 
         default:
+          if let margins = manager?.directionalLayoutMargins {
+            stackLeadingConstraint.constant = margins.left
+            stackTrailingConstraint.constant = -margins.right
+            stackBottomConstraint.constant = -margins.bottom
+            contentTopConstraint.constant = -margins.top
+          } else {
             stackLeadingConstraint.constant = 24
             stackTrailingConstraint.constant = -24
             stackBottomConstraint.constant = -24
             contentTopConstraint.constant = -24
+          }
+          
+          if let spacing = manager?.spacing {
+            contentStackView.spacing = spacing
+          } else {
             contentStackView.spacing = 24
-
-        }
+          }
+      }
 
     }
 
