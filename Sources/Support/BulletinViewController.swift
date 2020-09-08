@@ -264,7 +264,16 @@ extension BulletinViewController {
     }
 
     fileprivate func setUpLayout(with traitCollection: UITraitCollection) {
-
+      
+        if let item = manager?.currentItem as? BLTNActionItem,
+          let actionButton = item.actionButton {
+          if let actionButtonImage = item.appearance.actionButtonImage {
+            actionButton.setBackgroundImage(actionButtonImage, for: .normal)
+          } else {
+            actionButton.setBackgroundColor(item.appearance.actionButtonColor, forState: .normal)
+          }
+        }
+      
         switch traitCollection.horizontalSizeClass {
         case .regular:
             leadingConstraint.isActive = false
