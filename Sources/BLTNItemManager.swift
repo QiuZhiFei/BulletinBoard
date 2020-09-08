@@ -79,6 +79,7 @@ import UIKit
   
     @objc public var directionalLayoutMargins: UIEdgeInsets = UIEdgeInsets(top: 24, left: 24, bottom: 24, right: 24)
     @objc public var spacing: CGFloat = 24
+    @objc public var dismissalHandler: (() -> Void)?
 
     /**
      * The spacing between the edge of the screen and the edge of the card. Defaults to regular.
@@ -541,6 +542,7 @@ extension BLTNItemManager {
         currentItem = self.rootItem
         itemsStack.removeAll()
 
+        dismissalHandler?()
     }
 
 }
