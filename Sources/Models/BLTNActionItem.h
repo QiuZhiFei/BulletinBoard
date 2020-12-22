@@ -10,6 +10,7 @@
 @class BLTNItemManager;
 @class BLTNItemAppearance;
 @class BLTNInterfaceBuilder;
+@class ActionButtonDescriptor;
 
 /**
  * A standard bulletin item with that displays a large action button and a smaller button for alternative options.
@@ -34,6 +35,10 @@
  */
 
 @interface BLTNActionItem : NSObject <BLTNItem>
+
+@property (nonatomic, strong, nullable, readonly) NSArray <ActionButtonDescriptor *> *actionButtonDescriptors;
+
+- (void)addButtonDescriptor:(nullable ActionButtonDescriptor *)actionButtonDescriptor;
 
 #pragma mark - Page Contents
 

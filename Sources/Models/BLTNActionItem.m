@@ -11,6 +11,8 @@
 
 @property (nonatomic, strong, nullable, readwrite) UIButton *actionButton;
 @property (nonatomic, strong, nullable, readwrite) UIButton *alternativeButton;
+@property (nonatomic, strong, nullable, readwrite) NSArray <ActionButtonDescriptor *> *actionButtonDescriptors;
+@property (nonatomic, strong, nullable, readwrite) NSArray <UIButton *> *actionButtons;
 
 @end
 
@@ -58,7 +60,27 @@
     }
 }
 
+- (void)addButtonDescriptor:(nullable ActionButtonDescriptor *)actionButtonDescriptor
+{
+  if (actionButtonDescriptor == nil) {
+    return;
+  }
+  
+  NSMutableArray *actionButtonDescriptors = [NSMutableArray arrayWithArray:self.actionButtonDescriptors];
+  [actionButtonDescriptors addObject:actionButtonDescriptor];
+  self.actionButtonDescriptors = [actionButtonDescriptors copy];
+}
+
 #pragma mark - Buttons
+
+- (void)handleActionButtonTapped:(UIButton *)button
+{
+  NSUInteger index = [self.actionButtons indexOfObject:button];
+  ActionButtonDescriptor *descriptor = [self.actionButtonDescriptors objectAtIndex:index];
+  if (descriptor.didClickedHandler) {
+    descriptor.didClickedHandler(self, button);
+  }
+}
 
 - (void)actionButtonTappedWithSender:(UIButton *)sender
 {
@@ -75,7 +97,7 @@
 }
 
 #pragma mark - View Management
-
+     
 - (NSArray<UIView *> *)makeFooterViewsWithInterfaceBuilder:(BLTNInterfaceBuilder *)interfaceBuilder
 {
     return nil;
@@ -101,7 +123,7 @@
 
     // Buttons stack
 
-    if (self.actionButtonTitle == nil && self.alternativeButtonTitle == nil) {
+    if (self.actionButtonTitle == nil && self.alternativeButtonTitle == nil && self.actionButtonDescriptors.count == 0) {
         return arrangedSubviews;
     }
 
@@ -112,6 +134,18 @@
         [buttonsStack addArrangedSubview:buttonWrapper];
         self.actionButton = buttonWrapper.button;
     }
+  
+  NSMutableArray *actionButtons = [NSMutableArray arrayWithCapacity:self.actionButtonDescriptors.count];
+  for (ActionButtonDescriptor *descriptor in self.actionButtonDescriptors) {
+    BLTNHighlightButtonWrapper *buttonWrapper = [interfaceBuilder makeActionButtonWithDescriptor:descriptor];
+    [buttonsStack addArrangedSubview:buttonWrapper];
+    
+    [buttonWrapper.button addTarget:self
+                             action:@selector(handleActionButtonTapped:)
+                   forControlEvents:UIControlEventTouchUpInside];
+    [actionButtons addObject:buttonWrapper.button];
+  }
+  self.actionButtons = [actionButtons copy];
 
     if (self.alternativeButtonTitle) {
         UIButton *button = [interfaceBuilder makeAlternativeButtonWithTitle:self.alternativeButtonTitle];

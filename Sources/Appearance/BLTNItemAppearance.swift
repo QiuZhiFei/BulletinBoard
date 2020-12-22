@@ -9,6 +9,16 @@ import UIKit
  * An object that defines the appearance of bulletin items.
  */
 
+
+@objcMembers
+public final class ActionButtonDescriptor: NSObject {
+  public var height: CGFloat = 55
+  public var cornerRadius: CGFloat = 12
+  public var prepare: ((UIButton) -> Void)?
+  public var didClickedHandler: ((BLTNActionItem, UIButton) -> Void)?
+}
+
+
 @objc public class BLTNItemAppearance: NSObject {
 
     // MARK: - Color Customization

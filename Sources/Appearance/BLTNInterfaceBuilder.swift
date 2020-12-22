@@ -95,6 +95,22 @@ import UIKit
      * - parameter title: The title of the button.
      */
 
+  @objc open func makeActionButton(descriptor: ActionButtonDescriptor) -> BLTNHighlightButtonWrapper {
+    let actionButton = HighlightButton()
+    actionButton.layer.cornerRadius = descriptor.cornerRadius
+    
+    let wrapper = BLTNHighlightButtonWrapper(button: actionButton)
+    wrapper.setContentHuggingPriority(.defaultLow, for: .horizontal)
+    
+    let heightConstraint = wrapper.heightAnchor.constraint(equalToConstant: descriptor.height)
+    heightConstraint.priority = .defaultHigh
+    heightConstraint.isActive = true
+    
+    descriptor.prepare?(actionButton)
+
+    return wrapper
+  }
+  
     @objc open func makeActionButton(title: String) -> BLTNHighlightButtonWrapper {
 
         let actionButton = HighlightButton()
